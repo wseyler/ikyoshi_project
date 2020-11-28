@@ -13,6 +13,7 @@ class Person(models.Model):
     birthday = models.DateField(blank=True, null=True)
     isFemale = models.BooleanField(default=False)
     notes = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='people/images', blank=True, null=True)
 
     def __str__(self):
         return self.last_name + ", " + self.first_name
