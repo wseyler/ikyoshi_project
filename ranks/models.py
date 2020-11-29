@@ -1,4 +1,5 @@
 from django.db import models
+from styles.models import Style
 
 class RankType(models.Model):
     style = models.ForeignKey('styles.Style', on_delete=models.CASCADE)
@@ -12,3 +13,6 @@ class RankType(models.Model):
 
     class Meta(object):
         ordering = ['ordinal']
+
+    def __str__(self):
+        return self.style.title + ", " + self.title
