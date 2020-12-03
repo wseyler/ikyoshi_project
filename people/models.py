@@ -1,4 +1,5 @@
 from django.db import models
+from styles.models import Style
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30, blank=False)
@@ -25,5 +26,6 @@ class Sponsor(Person):
     isParent = models.BooleanField(default=True)
 
 class MartialArtist(Person):
+    styles = models.ManyToManyField(Style)
     enrollment_date = models.DateField()
     sponsor = models.ForeignKey(Sponsor, null=True, on_delete=models.SET_NULL)
