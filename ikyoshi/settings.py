@@ -79,14 +79,8 @@ WSGI_APPLICATION = 'ikyoshi.wsgi.application'
 
 DATABASES = {
     'default': {
-
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ikyoshi',
-        'USER': 'iKyoshiUser',
-        'PASSWORD': 'BassaiTomari!01',
-        'HOST': 'localhost',
-        'PORT': '3306',
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3'
     }
 }
 
