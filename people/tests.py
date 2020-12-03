@@ -6,7 +6,7 @@ from .models import Sponsor
 class SponsorModelTests(TestCase):
 
     def test_for_successful_save_of_sponsor(self):
-        test_sponsor = Sponsor(first_name='John', last_name='Doe')
+        test_sponsor = Sponsor(first_name='John', last_name='Doe', telephone='999-999-9999')
 
         try:
             test_sponsor.full_clean()
@@ -21,7 +21,7 @@ class SponsorModelTests(TestCase):
     def test_for_unsuccessful_save_of_sponsor(self):
         test_sponsor = Sponsor(first_name='John')
         self.assertIs(test_sponsor.id, None)
-        
+
         try:
             test_sponsor.full_clean()
         except ValidationError as e:
