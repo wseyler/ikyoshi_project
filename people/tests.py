@@ -7,7 +7,6 @@ class SponsorModelTests(TestCase):
 
     def test_for_successful_save_of_sponsor(self):
         test_sponsor = Sponsor(first_name='John', last_name='Doe', telephone='999-999-9999')
-
         try:
             test_sponsor.full_clean()
         except ValidationError as e:

@@ -1,5 +1,6 @@
 from django.db import models
 from styles.models import Style
+from people.models import MartialArtist
 
 class RankType(models.Model):
     style = models.ForeignKey('styles.Style', on_delete=models.CASCADE)
@@ -15,4 +16,15 @@ class RankType(models.Model):
         ordering = ['ordinal']
 
     def __str__(self):
-        return self.style.title + ", " + self.title
+        return self.style.title + ', ' + self.title
+
+class Rank(models.Model):
+    martial_artist = models.ForeignKey('people.MartialArtist', on_delete=models.CASCADE)
+    rank_type = models.ForeignKey(RankType, on_delete=models.PROTECT)
+    test_date = models.DateField()
+    award_date = models.DateField()
+    tested = models.BooleanField(default=True)
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.martial_artist.__str__() + ': ' + self.rank_type.__str__() + ' -- ' + self.award_date.__str__()
