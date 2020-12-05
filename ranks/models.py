@@ -16,12 +16,12 @@ class RankType(models.Model):
         ordering = ['ordinal']
 
     def __str__(self):
-        return self.style.title + ', ' + self.title
+        return self.style.title + ', ' + self.title + ' (' + self.indicator + ')'
 
 class Rank(models.Model):
     martial_artist = models.ForeignKey('people.MartialArtist', on_delete=models.CASCADE)
     rank_type = models.ForeignKey(RankType, on_delete=models.PROTECT)
-    test_date = models.DateField()
+    test_date = models.DateField(blank=True, null=True)
     award_date = models.DateField()
     tested = models.BooleanField(default=True)
     notes = models.TextField(blank=True, null=True)
