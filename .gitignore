@@ -3,7 +3,6 @@
 *.pot
 *.pyc
 
-media
 
 # Backup files #
 *.bak
