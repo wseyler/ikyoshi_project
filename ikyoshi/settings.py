@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'styles.apps.StyleConfig',
     'ranks.apps.RanksConfig',
     'teachings.apps.TeachingsConfig',
+    'pages.apps.PagesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
