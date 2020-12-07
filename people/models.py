@@ -29,3 +29,4 @@ class MartialArtist(Person):
     sponsor = models.ForeignKey(Sponsor, on_delete=models.SET_NULL, blank=True, null=True )
     birthday = models.DateField(blank=True, null=True)
     image = models.ImageField(upload_to='people/images', blank=True, null=True)
+    active = models.BooleanField(default=True)
