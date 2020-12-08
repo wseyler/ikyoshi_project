@@ -1,0 +1,39 @@
+
+<html>
+  <head>
+    {% load static %}
+    <title>Bougyo No Kan Dojo</title>
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
+  </head>
+    <header>
+      <a href="{% url 'home' %}">Home</a> | <a href="{% url 'about' %}">About</a>
+
+      {% if user.is_authenticated %}
+        Logged in as {{ user.username }}
+        | <form action="{% url 'logoutuser' %}" method="POST">
+          {% csrf_token %}
+          <button type="submit">Logout</button>
+        </form>
+      {% else %}
+        | <a href="{% url 'signupuser' %}">Signup</a> | <a href="#">Login</a>
+      {% endif %}
+    </header>
+  <body>
+    <div class="page-header">
+      <h1><a href="/">Bougyo No Kan Dojo</a></h1>
+      <div style="width:800px; margin:0 auto;">
+        <img class="displayed" src="{% static '/pages/images/BNKLogo.jpg' %}"  alt="My image">
+      </div>
+    </div>
+    <div class="content container">
+      <div class="row">
+        <div class="col-md-8">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

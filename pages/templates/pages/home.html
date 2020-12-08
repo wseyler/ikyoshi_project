@@ -1,11 +1,4 @@
-<header>
-  <a href="{% url 'home' %}">Home</a> | <a href="{% url 'about' %}">About</a>
-</header>
+{% extends "pages/base.html" %}
 
-<body>
-    <h1>Bougyo No Kan Dojo</h1>
-    <div style="width:800px; margin:0 auto;">
-      <img src="/media/BNKLogo.jpg" />
-    </div>
-</body>
-<a href="/admin">Enter</a>
+{% block content %}
+{% endblock %}

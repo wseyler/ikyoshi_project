@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ')*7y$(ex+^dw1srqan68d=n2%ndnhhorf=&$%i1(of^o3tu5z2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['ikyoshi.pythonanywhere.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -128,8 +128,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-try:
-    from .local_settings import *
-except ImportError:
-    print("Looks like no local file.  You must be on production")
