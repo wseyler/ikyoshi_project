@@ -9,9 +9,11 @@
   </head>
     <header>
       <a href="{% url 'home' %}">Home</a> | <a href="{% url 'about' %}">About</a>
-
+      {% if user.is_staff %}
+        | <a href="/admin">Admin</a>
+      {% endif %}
       {% if user.is_authenticated %}
-        Logged in as {{ user.username }}
+        | Logged in as {{ user.username }}
         | <form action="{% url 'logoutuser' %}" method="POST">
           {% csrf_token %}
           <button type="submit">Logout</button>
