@@ -13,6 +13,7 @@ class MartialArtistAdmin(admin.ModelAdmin):
     inlines = [RankInline]
     list_display = ['last_name', 'first_name', 'enrollment_date', 'sponsor', 'active', 'image_tag_small']
     list_filter = ['active', 'sponsor']
+    list_display_links = ['last_name', 'first_name']
     readonly_fields = ['martial_artist_image']
     fieldsets = (
         ('Personal Info', {
