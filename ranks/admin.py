@@ -21,7 +21,7 @@ class RankTypeAdmin(SortableAdminMixin, admin.ModelAdmin):
 
 class RankAdmin(admin.ModelAdmin):
     list_display = ['martial_artist', 'rank_type', 'test_date', 'award_date', 'tested']
-    list_filter = ['rank_type', 'award_date', 'tested']
+    list_filter = ['martial_artist', 'rank_type', 'award_date', 'tested']
     list_display_links = ['martial_artist', 'rank_type']
 
 admin.site.register(RankType, RankTypeAdmin)
