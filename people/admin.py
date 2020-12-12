@@ -13,7 +13,16 @@ class MartialArtistAdmin(admin.ModelAdmin):
     inlines = [RankInline]
     list_display = ['last_name', 'first_name', 'enrollment_date', 'sponsor', 'active', 'image_tag_small']
     list_filter = ['active', 'sponsor']
+    list_display_links = ['last_name', 'first_name']
     readonly_fields = ['martial_artist_image']
+    fieldsets = (
+        ('Personal Info', {
+            'fields' : ('first_name', 'middle_name', 'last_name', 'email', 'sponsor', 'birthday', 'isFemale', 'image', 'martial_artist_image')
+        }),
+        ('Martial Arts Info', {
+            'fields' : ('enrollment_date', 'active')
+        })
+    )
 
     def martial_artist_image(self, obj):
         if obj.image:
@@ -30,6 +39,13 @@ class MartialArtistAdmin(admin.ModelAdmin):
 class SponsorAdmin(admin.ModelAdmin):
     model = Sponsor
     list_display = ['first_name', 'middle_name', 'last_name', 'email', 'street', 'city', 'state', 'zip', 'telephone', 'isParent']
-
+    fieldsets = (
+        ('Personal Info', {
+            'fields' : ('first_name', 'middle_name', 'last_name', 'isParent')
+        }),
+        ('Contact Info', {
+            'fields' : ('street', 'city', 'state', 'zip', 'telephone')
+        })
+    )
 admin.site.register(MartialArtist, MartialArtistAdmin)
 admin.site.register(Sponsor, SponsorAdmin)
