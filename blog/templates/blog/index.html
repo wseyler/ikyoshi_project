@@ -1,4 +1,4 @@
-{% extends "blog/base.html" %}
+{% extends "pages/base.html" %}
 {% block content %}
 <style>
     body {
@@ -45,7 +45,7 @@
             </div>
             {% endfor %}
         </div>
-        {% block sidebar %} {% include 'blog/sidebar.html' %} {% endblock sidebar %}
+        {% block sidebar %} {% include 'pages/sidebar.html' %} {% endblock sidebar %}
     </div>
 </div>
 {%endblock%}

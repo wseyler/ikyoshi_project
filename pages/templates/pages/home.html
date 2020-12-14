@@ -1,4 +1,7 @@
 {% extends "pages/base.html" %}
-
+{% load static %}
 {% block content %}
+  <div style="width:800px; margin:0 auto;">
+    <img class="displayed" src="{% static '/pages/images/BNKLogo.jpg' %}"  alt="My image">
+  </div>
 {% endblock %}

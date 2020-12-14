@@ -1,41 +1,99 @@
-
+<!DOCTYPE html>
 <html>
-  <head>
-    {% load static %}
-    <title>Bougyo No Kan Dojo</title>
-      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-      <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-      <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
-  </head>
-    <header>
-      <a href="{% url 'home' %}">Home</a> | <a href="/blog">Blog</a> | <a href="{% url 'about' %}">About</a>
-      {% if user.is_staff %}
-        | <a href="/admin">Admin</a>
-      {% endif %}
-      {% if user.is_authenticated %}
-        | Logged in as {{ user.username }}
-        | <form action="{% url 'logoutuser' %}" method="POST">
-          {% csrf_token %}
-          <button type="submit">Logout</button>
-        </form>
-      {% else %}
-        | <a href="{% url 'signupuser' %}">Signup</a> | <a href="{% url 'loginuser' %}">Login</a>
-      {% endif %}
-    </header>
-  <body>
-    <div class="page-header">
-      <h1><a href="/">Bougyo No Kan Dojo</a></h1>
-      <div style="width:800px; margin:0 auto;">
-        <img class="displayed" src="{% static '/pages/images/BNKLogo.jpg' %}"  alt="My image">
-      </div>
-    </div>
-    <div class="content container">
-      <div class="row">
-        <div class="col-md-8">
-          {% block content %}
-          {% endblock %}
-        </div>
-      </div>
-    </div>
-  </body>
+
+    <head>
+        <title>Bougyo No Kan Dojo</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+        <meta name="google" content="notranslate" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous" />
+    </head>
+
+    <body>
+        <style>
+            body {
+            font-family: "Roboto", sans-serif;
+            font-size: 17px;
+            background-color: #fdfdfd;
+        }
+        .shadow {
+            box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
+        }
+        .btn-danger {
+            color: #fff;
+            background-color: #f00000;
+            border-color: #dc281e;
+        }
+        .masthead {
+            background: #3398E1;
+            height: auto;
+            padding-bottom: 15px;
+            box-shadow: 0 16px 48px #E3E7EB;
+            padding-top: 10px;
+        }
+    </style>
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light shadow" id="mainNav">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'home' %}">Bougyo No Kan</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item text-black">
+                            <a class="nav-link text-black font-weight-bold" href="/">Home</a>
+                        </li>
+                        <li class="nav-item text-black">
+                            <a class="nav-link text-black font-weight-bold" href="#">About</a>
+                        </li>
+                        <li class="nav-item text-black">
+                            <a class="nav-link text-black font-weight-bold" href="#">Contact</a>
+                        </li>
+                        <li class="nav-item text-black">
+                            <a class="nav-link text-black font-weight-bold" href="/blog">Blog</a>
+                        </li>
+                        {% if user.is_staff %}
+                        <li class="nav-item text-black">
+                            <a class="nav-link text-black font-weight-bold" href="/admin">Admin</a>
+                        </li>
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                        <li class="nav-item text-black">
+                          <div class="nav-link text-black font-weight-bold">
+                            Logged in as {{ user.username }}
+                          </div>
+                        </li>
+                        <li class="nav-item text-black">
+                          {% csrf_token %}
+                          <div class="nav-link text-black font-weight-bold">
+                            <form action="{% url 'logoutuser' %}" method="POST">
+                              <button type="submit">Logout</button>
+                            </form>
+                          </div>
+                        </li>
+                        {% else %}
+                        <li class="nav-item text-black">
+                          <a href="{% url 'signupuser' %}">Signup</a>
+                        </li>
+                        <li class="nav-item text-black">
+                          <a href="{% url 'loginuser' %}">Login</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% block content %}
+        <!-- Content Goes here -->
+        {% endblock content %}
+        <!-- Footer -->
+        <footer class="py-3 bg-grey">
+            <p class="m-0 text-dark text-center ">Copyright &copy; Bougyo No Kan Dojo</p>
+        </footer>
+    </body>
+
 </html>
