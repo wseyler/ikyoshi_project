@@ -13,4 +13,3 @@ class StyleAdmin(admin.ModelAdmin):
     inlines = [RankTypeInline]
 
 admin.site.register(Style, StyleAdmin)
-admin.site.site_header = 'Bougyo No Kan Dojo Administration'
