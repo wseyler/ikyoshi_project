@@ -19,6 +19,8 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+admin.site.site_header = 'Bougyo No Kan Dojo Administration'
+
 urlpatterns = [
     path('people/', include('people.urls')),
     path('ranks/', include('ranks.urls')),
