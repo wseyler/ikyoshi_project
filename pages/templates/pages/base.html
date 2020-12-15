@@ -51,6 +51,7 @@
                           {% csrf_token %}
                           <div class="nav-link text-black font-weight-bold">
                             <form action="{% url 'logoutuser' %}" method="POST">
+                              {% csrf_token %}
                               <button type="submit">Logout</button>
                             </form>
                           </div>
