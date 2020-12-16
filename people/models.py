@@ -9,10 +9,15 @@ class Person(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return self.last_name + ', ' + self.first_name
+        name = self.first_name
+        if self.middle_name != None and len(self.middle_name) > 0:
+            name = name + ' ' + self.middle_name[0] + '.'
+        name = name + ' ' + self.last_name
+        return name
 
     class Meta:
         abstract = True
+        ordering = ['last_name', 'first_name']
 
 class Sponsor(Person):
     isParent = models.BooleanField(default=True)
