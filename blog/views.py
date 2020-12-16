@@ -25,6 +25,9 @@ def post_detail(request, slug):
             new_comment = comment_form.save(commit=False)
             # Assign the current post to the comment
             new_comment.post = post
+            # Assign a user to the comment
+            if request.user.is_authenticated:
+                new_comment.author = request.user
             # Save the comment to the database
             new_comment.save()
     else:
