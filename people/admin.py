@@ -19,8 +19,8 @@ class MartialArtistAdmin(admin.ModelAdmin):
         ('Personal Info', {
             'fields' : ('first_name', 'middle_name', 'last_name', 'email', 'sponsor', 'birthday', 'isFemale', 'image', 'martial_artist_image')
         }),
-        ('Martial Arts Info', {
-            'fields' : ('enrollment_date', 'active')
+        ('Dojo Info', {
+            'fields' : ('enrollment_date', 'payment_plan', 'active')
         })
     )
 

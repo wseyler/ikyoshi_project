@@ -1,5 +1,6 @@
 from django.db import models
 from styles.models import Style
+from tuition.models import PaymentPlan
 
 class Person(models.Model):
     first_name = models.CharField(max_length=30, blank=False)
@@ -31,7 +32,8 @@ class MartialArtist(Person):
     isFemale = models.BooleanField(default=False)
     styles = models.ManyToManyField(Style)
     enrollment_date = models.DateField(blank=True, null=True)
-    sponsor = models.ForeignKey(Sponsor, on_delete=models.SET_NULL, blank=True, null=True )
+    sponsor = models.ForeignKey(Sponsor, on_delete=models.SET_NULL, blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     image = models.ImageField(upload_to='people/images', blank=True, null=True)
     active = models.BooleanField(default=True)
+    payment_plan = models.ForeignKey(PaymentPlan, on_delete=models.SET_NULL, blank=True, null=True)
