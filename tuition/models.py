@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 class PaymentPlan(models.Model):
     NONE_FREQUENCY = 0
@@ -23,3 +24,13 @@ class PaymentPlan(models.Model):
 
     def __str__(self):
         return self.title
+
+class TuitionPayment(models.Model):
+    payment_plan = models.ForeignKey(PaymentPlan, on_delete=models.SET_NULL, blank=True, null=True )
+    payer = models.ForeignKey("people.MartialArtist", on_delete=models.CASCADE)
+    date_paid = models.DateField()
+    paid = models.DecimalField(max_digits=6, decimal_places=2)
+    notes = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.date_paid.strftime("%m/%d/%Y") + ' - ' + str(self.payer) + ' - $' + str(self.paid)
