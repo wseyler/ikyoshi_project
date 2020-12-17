@@ -7,6 +7,7 @@ from ranks.models import Rank
 class RankInline(admin.StackedInline):
     model = Rank
     extra = 1
+    ordering = ("-award_date",)
 
 class MartialArtistAdmin(admin.ModelAdmin):
     model = MartialArtist
