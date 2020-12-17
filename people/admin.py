@@ -4,9 +4,10 @@ from django.utils.html import format_html
 from .models import MartialArtist, Sponsor
 from ranks.models import Rank
 
-class RankInline(admin.StackedInline):
+class RankInline(admin.TabularInline):
     model = Rank
     extra = 1
+    ordering = ("-award_date",)
 
 class MartialArtistAdmin(admin.ModelAdmin):
     model = MartialArtist
