@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'teachings.apps.TeachingsConfig',
     'pages.apps.PagesConfig',
     'tuition.apps.TuitionConfig',
+    'store.apps.StoreConfig',
     'blog.apps.BlogConfig',
     'django.contrib.admin',
     'django.contrib.auth',
