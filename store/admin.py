@@ -8,7 +8,14 @@ class LineItemInline(admin.TabularInline):
 class InvoiceAdmin(admin.ModelAdmin):
     model = Invoice
     inlines = [LineItemInline]
-    list_display = ["id", "purchaser", "date_ordered", "date_completed", "invoice_total"]
+    list_display = ['id', 'purchaser', 'date_ordered', 'date_completed', 'invoice_total', 'is_completed']
+    list_display_links = ['id', 'purchaser', 'date_ordered', 'date_completed', 'invoice_total']
+    # list_filter = ['is_completed',]
+    # fieldsets = (
+    #     ('', {
+    #         'fields' : ('id', 'purchaser', 'date_completed', 'invoice_total', 'notes')
+    #     }),
+    # )
 
 admin.site.register(Item)
 admin.site.register(Invoice, InvoiceAdmin)
