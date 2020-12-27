@@ -9,12 +9,14 @@ class RankInline(admin.TabularInline):
     extra = 1
     ordering = ("-award_date",)
 
+@admin.register(MartialArtist)
 class MartialArtistAdmin(admin.ModelAdmin):
     model = MartialArtist
     inlines = [RankInline]
     list_display = ['last_name', 'first_name', 'enrollment_date', 'sponsor', 'active', 'image_tag_small']
     list_filter = ['active', 'sponsor']
     list_display_links = ['last_name', 'first_name']
+    search_fields = ['last_name', 'first_name']
     readonly_fields = ['martial_artist_image']
     fieldsets = (
         ('Personal Info', {
@@ -37,9 +39,11 @@ class MartialArtistAdmin(admin.ModelAdmin):
         else:
             return ""
 
+@admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
     model = Sponsor
     list_display = ['first_name', 'middle_name', 'last_name', 'email', 'street', 'city', 'state', 'zip', 'telephone', 'isParent']
+    search_fields = ['last_name', 'first_name']
     fieldsets = (
         ('Personal Info', {
             'fields' : ('first_name', 'middle_name', 'last_name', 'isParent')
@@ -48,5 +52,3 @@ class SponsorAdmin(admin.ModelAdmin):
             'fields' : ('street', 'city', 'state', 'zip', 'telephone')
         })
     )
-admin.site.register(MartialArtist, MartialArtistAdmin)
-admin.site.register(Sponsor, SponsorAdmin)

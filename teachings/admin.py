@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import TrainingClass
 
+@admin.register(TrainingClass)
 class TrainingClassAdmin(admin.ModelAdmin):
     list_display = ['start', 'end', 'duration_in_mins', 'instructor', 'notes']
     list_filter = ['instructor']
@@ -13,5 +14,3 @@ class TrainingClassAdmin(admin.ModelAdmin):
             'fields' : ('instructor', 'students')
         })
     )
-
-admin.site.register(TrainingClass, TrainingClassAdmin)

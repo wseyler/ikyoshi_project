@@ -8,8 +8,7 @@ class RankTypeInline(admin.TabularInline):
     extra = 1
     exclude = ('ordinal',)
 
+@admin.register(Style)
 class StyleAdmin(admin.ModelAdmin):
     list_display = ['title', 'originator', 'notes']
     inlines = [RankTypeInline]
-
-admin.site.register(Style, StyleAdmin)
