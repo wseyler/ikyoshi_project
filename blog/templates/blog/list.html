@@ -34,7 +34,7 @@
     <div class="row">
         <!-- Blog Entries Column -->
         <div class="col-md-8 mt-3 left">
-            {% for post in post_list %}
+            {% for post in posts %}
             <div class="card mb-4">
                 <div class="card-body">
                     <h2 class="card-title">{{ post.title }}</h2>
@@ -48,4 +48,5 @@
         {% block sidebar %} {% include 'pages/sidebar.html' %} {% endblock sidebar %}
     </div>
 </div>
-{%endblock%}
+{% include 'pages/pagination.html' with page=page_obj %}
+{% endblock %}

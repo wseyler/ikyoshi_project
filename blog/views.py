@@ -3,9 +3,11 @@ from .models import Post
 from .forms import CommentForm
 from django.shortcuts import render, get_object_or_404
 
-class PostList(generic.ListView):
+class PostListView(generic.ListView):
     queryset = Post.published.all().order_by('-created')
-    template_name = 'blog/index.html'
+    context_object_name = 'posts'
+    paginate_by = 3
+    template_name = 'blog/list.html'
 
 class PostDetail(generic.DetailView):
     model = Post
