@@ -8,10 +8,13 @@ class CommentInline(admin.StackedInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     inlines = [CommentInline]
-    list_display = ('title', 'status','created')
-    list_filter = ("status",)
-    search_fields = ['title', 'body']
+    list_display = ('title', 'slug', 'author', 'publish', 'status')
+    list_filter = ('status', 'created', 'publish', 'author')
+    search_fields = ('title', 'body')
     prepopulated_fields = {'slug': ('title',)}
+    raw_id_fields = ('author',)
+    date_hierarchy = 'publish'
+    ordering = ('status', 'publish')
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
