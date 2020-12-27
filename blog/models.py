@@ -18,7 +18,7 @@ class Post(models.Model):
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS, default=0)
     objects = models.Manager()  # The default manager
     published = PublishedManager() # Our custom manager
@@ -32,13 +32,14 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
     name = models.CharField(max_length=80)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    email = models.EmailField(default='someone@nowhere.com')
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created']
 
     def __str__(self):
-        return 'Comment {} by {}'.format(self.body, self.name)
+        return f'Comment by {self.name} on {self.post}'

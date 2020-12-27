@@ -1,4 +1,5 @@
-{% extends 'pages/base.html' %} {% block content %}
+{% extends 'pages/base.html' %}
+{% block content %}
 
 <div class="container">
   <div class="row">
@@ -14,18 +15,24 @@
     <div class="col-md-8 card mb-4  mt-3 ">
       <div class="card-body">
         <!-- comments -->
-        <h2>{{ comments.count }} comments</h2>
+        {% with comments.count as total_comments %}
+          <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+          </h2>
+        {% endwith %}
 
         {% for comment in comments %}
         <div class="comments" style="padding: 10px;">
           <p class="font-weight-bold">
-            {{ comment.name }}
+            Comment {{ forloop.counter }} by {{ comment.name }}
             <span class=" text-muted font-weight-normal">
               {{ comment.created }}
             </span>
           </p>
           {{ comment.body | linebreaks }}
         </div>
+        {% empty %}
+          <p>There are no comments yet.</p>
         {% endfor %}
       </div>
     </div>
