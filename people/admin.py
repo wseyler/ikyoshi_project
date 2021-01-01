@@ -3,16 +3,23 @@ from django.utils.html import format_html
 
 from .models import MartialArtist, Sponsor
 from ranks.models import Rank
+from tuition.models import TuitionPayment
 
 class RankInline(admin.TabularInline):
     model = Rank
     extra = 1
-    ordering = ("-award_date",)
+    ordering = ('-award_date',)
+
+class TuitionPaymentInLine(admin.TabularInline):
+    model = TuitionPayment
+    extra = 1
+    ordering = ('-date_paid',)
+
 
 @admin.register(MartialArtist)
 class MartialArtistAdmin(admin.ModelAdmin):
     model = MartialArtist
-    inlines = [RankInline]
+    inlines = [TuitionPaymentInLine, RankInline]
     list_display = ['last_name', 'first_name', 'enrollment_date', 'sponsor', 'active', 'image_tag_small']
     list_filter = ['active', 'sponsor']
     list_display_links = ['last_name', 'first_name']
