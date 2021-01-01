@@ -27,7 +27,7 @@ class MartialArtistAdmin(admin.ModelAdmin):
     readonly_fields = ['martial_artist_image']
     fieldsets = (
         ('Personal Info', {
-            'fields' : ('first_name', 'middle_name', 'last_name', 'email', 'sponsor', 'birthday', 'isFemale', 'image', 'martial_artist_image')
+            'fields' : ('first_name', 'middle_name', 'last_name', 'email', 'sponsor', 'birthday', 'isFemale', 'image', 'martial_artist_image', 'notes')
         }),
         ('Dojo Info', {
             'fields' : ('enrollment_date', 'payment_plan', 'active')

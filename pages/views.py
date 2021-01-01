@@ -18,21 +18,9 @@ def signupuser(request):
         if request.POST['password1'] == request.POST['password2']:
             try:
                 user = User.objects.create_user(request.POST['username'], '', request.POST['password1'])
-                # add minimal admin permissions
-                user.is_staff = True
-                permission = Permission.objects.get(name='Can view martial artist')
-                user.user_permissions.add(permission)
-                permission = Permission.objects.get(name='Can view rank')
-                user.user_permissions.add(permission)
-                permission = Permission.objects.get(name='Can view rank type')
-                user.user_permissions.add(permission)
-                permission = Permission.objects.get(name='Can view style')
-                user.user_permissions.add(permission)
-                permission = Permission.objects.get(name='Can view training class')
-                user.user_permissions.add(permission)
                 user.save()
                 login(request, user)
-                return redirect('/admin') #success, take me home!
+                return redirect('home') #success, take me home!
 
             except IntegrityError:
                 return render(request, 'pages/signupuser.html', {'form':UserCreationForm(), 'error':'That username has already been taken. Please choose a new username'})
@@ -53,7 +41,7 @@ def loginuser(request):
             return render(request, 'pages/loginuser.html', {'form':AuthenticationForm(), 'error':'Username and password did not match' })
         else:
             login(request, user)
-            if (user.is_staff):
+            if (user.is_superuser):
                 return redirect('/admin') #success, take me home!
             else:
                 return redirect('home') #success, take me home!

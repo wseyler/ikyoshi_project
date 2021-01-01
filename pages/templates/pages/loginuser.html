@@ -1,8 +1,12 @@
 {% extends "pages/base.html" %}
+{% load static %}
+{% block content %}
+<div style="width:800px; margin:0 auto;">
+  <img class="displayed" src="{% static '/pages/images/BNKLogo.jpg' %}"  alt="My image">
+</div>
 <h1>Login</h1>
 
-<h2>{{ error }}
-  {% block content %}
+<h2>{{ error }}</h2>
 
 <form method="POST">
   {% csrf_token %}
