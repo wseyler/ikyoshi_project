@@ -30,9 +30,6 @@ class Invoice(models.Model):
             total += li.item.retail_price * li.quantity
         return total
 
-    def is_completed(self):
-        return self.date_completed != None
-
 
 class LineItem(models.Model):
     invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE)
