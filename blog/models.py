@@ -9,7 +9,7 @@ STATUS = (
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
-        return super(PublishedManager, self).get_queryset().filter(status=1)
+        return super().get_queryset().filter(status=1)
 
 class Post(models.Model):
     title = models.CharField(max_length=200, unique=True)
