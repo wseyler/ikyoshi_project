@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ')*7y$(ex+^dw1srqan68d=n2%ndnhhorf=&$%i1(of^o3tu5z2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True  # Changed to True for local development
 
-ALLOWED_HOSTS = ['ikyoshi.pythonanywhere.com']
+ALLOWED_HOSTS = ['ikyoshi.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
