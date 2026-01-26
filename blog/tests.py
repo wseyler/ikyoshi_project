@@ -377,6 +377,13 @@ class PostDetailViewTests(TestCase):
     def test_post_detail_view_post_comment_authenticated(self):
         """Test POST request to create comment when authenticated"""
         self.client.login(username='testuser', password='testpass123')
+        # Set user's full name for the test
+        user = User.objects.get(username='testuser')
+        user.first_name = 'Test'
+        user.last_name = 'User'
+        user.email = 'testuser@example.com'
+        user.save()
+        
         form_data = {
             'name': 'John Doe',
             'email': 'john@example.com',
@@ -384,12 +391,16 @@ class PostDetailViewTests(TestCase):
         }
         response = self.client.post(
             reverse('post_detail', kwargs={'slug': self.post.slug}),
-            data=form_data
+            data=form_data,
+            follow=True  # Follow redirect to check comment was created
         )
+        # Should redirect and then show the post detail page
         self.assertEqual(response.status_code, 200)
         # Check that comment was created
-        comment = Comment.objects.get(post=self.post, name='John Doe')
-        self.assertEqual(comment.body, 'Test comment body')
+        comment = Comment.objects.get(post=self.post, body='Test comment body')
+        # When authenticated, name is set to user's full name or username
+        self.assertEqual(comment.name, 'Test User')
+        self.assertEqual(comment.email, 'testuser@example.com')
         self.assertEqual(comment.post, self.post)
 
     def test_post_detail_view_post_comment_unauthenticated(self):
@@ -401,12 +412,14 @@ class PostDetailViewTests(TestCase):
         }
         response = self.client.post(
             reverse('post_detail', kwargs={'slug': self.post.slug}),
-            data=form_data
+            data=form_data,
+            follow=True  # Follow redirect to check comment was created
         )
+        # Should redirect and then show the post detail page
         self.assertEqual(response.status_code, 200)
         # Check that comment was created
-        comment = Comment.objects.get(post=self.post, name='John Doe')
-        self.assertEqual(comment.body, 'Test comment body')
+        comment = Comment.objects.get(post=self.post, body='Test comment body')
+        self.assertEqual(comment.name, 'John Doe')
 
     def test_post_detail_view_invalid_comment_form(self):
         """Test POST request with invalid comment form"""

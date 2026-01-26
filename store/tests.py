@@ -94,7 +94,7 @@ class InvoiceModelTests(TestCase):
         invoice = Invoice.objects.create(
             purchaser=self.martial_artist
         )
-        self.assertEqual(str(invoice), str(invoice.id))
+        self.assertEqual(str(invoice), f'Invoice #{invoice.id}')
 
     def test_invoice_auto_date_ordered(self):
         """Test that date_ordered is automatically set"""

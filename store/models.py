@@ -21,14 +21,23 @@ class Invoice(models.Model):
     date_completed = models.DateField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['-date_ordered']),
+            models.Index(fields=['purchaser', '-date_ordered']),
+        ]
+        ordering = ['-date_ordered']
+
     def __str__(self):
-        return str(self.id)
+        return f'Invoice #{self.id}'
 
     def invoice_total(self):
-        total = 0
-        for li in self.lineitem_set.all():
-            total += li.item.retail_price * li.quantity
-        return total
+        """Optimized invoice total calculation using database aggregation"""
+        from django.db.models import Sum, F
+        total = self.lineitem_set.aggregate(
+            total=Sum(F('item__retail_price') * F('quantity'))
+        )['total']
+        return total or 0
 
 
 class LineItem(models.Model):

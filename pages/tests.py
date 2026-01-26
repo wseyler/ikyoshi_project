@@ -83,8 +83,9 @@ class SignupUserViewTests(TestCase):
         response = self.client.post(reverse('signupuser'), data=form_data)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/signupuser.html')
-        self.assertIn('error', response.context)
-        self.assertIn('Passwords did not match', response.context['error'])
+        # Form validation errors are in form.errors, not context['error']
+        self.assertIn('form', response.context)
+        self.assertFalse(response.context['form'].is_valid())
         
         # Check user was not created
         self.assertFalse(User.objects.filter(username='newuser').exists())
@@ -101,8 +102,11 @@ class SignupUserViewTests(TestCase):
         response = self.client.post(reverse('signupuser'), data=form_data)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/signupuser.html')
-        self.assertIn('error', response.context)
-        self.assertIn('already been taken', response.context['error'])
+        # Form validation errors are in form.errors
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        self.assertFalse(form.is_valid())
+        self.assertIn('username', form.errors)
 
     def test_signup_invalid_form_data(self):
         """Test signup with invalid form data - empty username"""
@@ -167,11 +171,8 @@ class LoginUserViewTests(TestCase):
         }
         response = self.client.post(reverse('loginuser'), data=form_data)
         self.assertEqual(response.status_code, 302)
-        # '/admin' redirects to '/admin/' with trailing slash (301), so check for redirect
-        # Allow redirects by using follow=False and checking the Location header
-        self.assertEqual(response.url, '/admin')
-        # Or check that it redirects (allowing for trailing slash redirect)
-        self.assertTrue(response.url.startswith('/admin'))
+        # Updated to use admin:index URL name
+        self.assertEqual(response.url, '/admin/')
 
     def test_login_invalid_credentials(self):
         """Test login with invalid credentials"""
@@ -182,8 +183,10 @@ class LoginUserViewTests(TestCase):
         response = self.client.post(reverse('loginuser'), data=form_data)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/loginuser.html')
-        self.assertIn('error', response.context)
-        self.assertIn('did not match', response.context['error'])
+        # Form validation errors are in form.errors
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        self.assertFalse(form.is_valid())
         
         # Check user is not logged in
         user = get_user(response.wsgi_request)
@@ -198,7 +201,10 @@ class LoginUserViewTests(TestCase):
         response = self.client.post(reverse('loginuser'), data=form_data)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'pages/loginuser.html')
-        self.assertIn('error', response.context)
+        # Form validation errors are in form.errors
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        self.assertFalse(form.is_valid())
 
 
 class LogoutUserViewTests(TestCase):
@@ -212,20 +218,11 @@ class LogoutUserViewTests(TestCase):
         )
 
     def test_logout_get_request_not_allowed(self):
-        """Test that GET request to logout doesn't work"""
+        """Test that GET request to logout returns 405 Method Not Allowed"""
         self.client.login(username='testuser', password='testpass123')
-        # The view only handles POST, so GET will raise an exception
-        # because the view doesn't return anything for GET requests
-        # Django's test client raises exceptions by default
-        from django.http import HttpResponseNotAllowed
-        try:
-            response = self.client.get(reverse('logoutuser'), raise_request_exception=False)
-            # If it doesn't raise, should be an error status
-            self.assertIn(response.status_code, [405, 500])
-        except (ValueError, AttributeError, TypeError):
-            # View doesn't return anything for GET, causing an error
-            # This is expected behavior - GET requests are not allowed
-            pass
+        # The view uses @require_http_methods(["POST"]) which returns 405 for GET
+        response = self.client.get(reverse('logoutuser'))
+        self.assertEqual(response.status_code, 405)  # Method Not Allowed
 
     def test_logout_post_request(self):
         """Test POST request to logout"""

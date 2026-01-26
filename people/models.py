@@ -10,15 +10,19 @@ class Person(models.Model):
     notes = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        name = self.first_name
-        if self.middle_name != None and len(self.middle_name) > 0:
-            name = name + ' ' + self.middle_name[0] + '.'
-        name = name + ' ' + self.last_name
-        return name
+        """Optimized string representation"""
+        name_parts = [self.first_name]
+        if self.middle_name:
+            name_parts.append(f'{self.middle_name[0]}.')
+        name_parts.append(self.last_name)
+        return ' '.join(name_parts)
 
     class Meta:
         abstract = True
         ordering = ['last_name', 'first_name']
+        indexes = [
+            models.Index(fields=['last_name', 'first_name']),
+        ]
 
 class Sponsor(Person):
     isParent = models.BooleanField(default=True)
