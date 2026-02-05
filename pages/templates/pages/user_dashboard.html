@@ -1,0 +1,53 @@
+{% extends "pages/base.html" %}
+{% load static %}
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'pages/style.css' %}">
+  <div class="container py-4">
+    <h1 class="mb-2">Welcome, {{ user.username }}</h1>
+    <p class="lead text-muted mb-4">Your dashboard — use the sections below to jump to each area or browse recent data.</p>
+
+    <div class="row">
+      {% for section in sections %}
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <a href="{{ section.url }}" class="text-dark">{{ section.label }}</a>
+              </h5>
+              {% if section.count is not None %}
+                <span class="badge badge-secondary">{{ section.count }} total</span>
+              {% endif %}
+            </div>
+            <div class="card-body">
+              {% if section.items %}
+                <ul class="list-unstyled mb-0">
+                  {% for item in section.items %}
+                    <li class="py-1 border-bottom border-light">
+                      {% if item.url %}
+                        <a href="{{ item.url }}">{{ item.text }}</a>
+                      {% else %}
+                        {{ item.text }}
+                      {% endif %}
+                      {% if item.sub %}
+                        <small class="text-muted d-block">{{ item.sub }}</small>
+                      {% endif %}
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-muted mb-0 small">Quick link — no summary data.</p>
+              {% endif %}
+            </div>
+            <div class="card-footer bg-white border-top-0">
+              <a href="{{ section.url }}" class="card-link font-weight-bold">View {{ section.label }} →</a>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-12">
+          <p class="text-muted">No sections available.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

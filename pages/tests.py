@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib.auth import get_user
 
-from .views import HomePageView, AboutPageView, signupuser, loginuser, logoutuser
+from .views import HomePageView, AboutPageView, signupuser, loginuser, logoutuser, user_dashboard
 
 
 class HomePageViewTests(TestCase):
@@ -144,14 +144,14 @@ class LoginUserViewTests(TestCase):
         self.assertIn('form', response.context)
 
     def test_login_successful(self):
-        """Test successful login"""
+        """Test successful login redirects to user dashboard"""
         form_data = {
             'username': 'testuser',
             'password': 'testpass123'
         }
         response = self.client.post(reverse('loginuser'), data=form_data)
         self.assertEqual(response.status_code, 302)  # Redirect
-        self.assertRedirects(response, reverse('home'))
+        self.assertRedirects(response, reverse('user_dashboard'))
         
         # Check user is logged in
         user = get_user(response.wsgi_request)
@@ -205,6 +205,48 @@ class LoginUserViewTests(TestCase):
         self.assertIn('form', response.context)
         form = response.context['form']
         self.assertFalse(form.is_valid())
+
+
+class UserDashboardViewTests(TestCase):
+    """Test cases for user_dashboard view"""
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            password='testpass123'
+        )
+
+    def test_dashboard_requires_login(self):
+        """Test that unauthenticated users are redirected to login"""
+        response = self.client.get(reverse('user_dashboard'))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/login/', response.url)
+
+    def test_dashboard_shows_sections_for_authenticated_user(self):
+        """Test that logged-in user sees permission-based sections with data"""
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(reverse('user_dashboard'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'pages/user_dashboard.html')
+        self.assertIn('sections', response.context)
+        # Regular user should see home, about, people, ranks, styles, blog (not admin)
+        sections = response.context['sections']
+        labels = [s['label'] for s in sections]
+        self.assertIn('Home', labels)
+        self.assertIn('About', labels)
+        self.assertIn('Blog', labels)
+        self.assertNotIn('Site administration', labels)
+
+    def test_dashboard_shows_admin_section_for_staff(self):
+        """Test that staff users see the Site administration section"""
+        self.user.is_staff = True
+        self.user.save()
+        self.client.login(username='testuser', password='testpass123')
+        response = self.client.get(reverse('user_dashboard'))
+        self.assertEqual(response.status_code, 200)
+        labels = [s['label'] for s in response.context['sections']]
+        self.assertIn('Site administration', labels)
 
 
 class LogoutUserViewTests(TestCase):

@@ -1,0 +1,7 @@
+# Local development (SQLite) — same as requirements.txt but without mysqlclient
+# Use: pip install -r requirements-local.txt
+asgiref>=3.11.0
+Django>=6.0.1
+django-admin-sortable2>=2.3.1
+Pillow>=10.0.0
+sqlparse>=0.5.5
