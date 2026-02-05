@@ -20,7 +20,6 @@ class TuitionPaymentInLine(admin.TabularInline):
 class MartialArtistAdmin(admin.ModelAdmin):
     model = MartialArtist
     inlines = [TuitionPaymentInLine, RankInline]
-    list_display = ['last_name', 'first_name', 'enrollment_date', 'sponsor', 'active', 'image_tag_small']
     list_filter = ['active', 'sponsor']
     list_display_links = ['last_name', 'first_name']
     search_fields = ['last_name', 'first_name']
@@ -31,8 +30,13 @@ class MartialArtistAdmin(admin.ModelAdmin):
         }),
         ('Dojo Info', {
             'fields' : ('enrollment_date', 'payment_plan', 'active')
+        }),
+        ('Account', {
+            'fields': ('user',),
+            'description': 'Link to a Django user so this person can log in and see their own ranks, profile, and styles.'
         })
     )
+    list_display = ['last_name', 'first_name', 'enrollment_date', 'sponsor', 'active', 'user', 'image_tag_small']
 
     def martial_artist_image(self, obj):
         if obj.image:

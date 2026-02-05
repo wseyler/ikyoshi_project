@@ -47,33 +47,60 @@ def _resolve_url(url_name_or_path):
     return reverse(url_name_or_path)
 
 
-def _get_dashboard_section_data(label, url_name_or_path):
+def _get_dashboard_section_data(request, label, url_name_or_path):
     """
-    Fetch summary data for a dashboard section. Returns dict with 'items' (list of display dicts)
-    and 'count', or None if this section has no data (link only).
+    Fetch summary data for a dashboard section, filtered by the current user when
+    they have a linked MartialArtist. Returns dict with 'items' and 'count', or None.
     """
     from people.models import MartialArtist
     from ranks.models import Rank
     from styles.models import Style
     from blog.models import Post
 
+    user = request.user
+    martial_artist = getattr(user, 'martial_artist_profile', None)
+    staff_see_all = user.is_staff and martial_artist is None
+
     try:
         if url_name_or_path == '/people/':
-            qs = MartialArtist.objects.filter(active=True).order_by('last_name', 'first_name')[:8]
-            count = MartialArtist.objects.filter(active=True).count()
-            items = [{'text': str(ma), 'url': None} for ma in qs]
+            if martial_artist is not None:
+                items = [{'text': str(martial_artist), 'url': None}]
+                count = 1
+            elif staff_see_all:
+                qs = MartialArtist.objects.filter(active=True).order_by('last_name', 'first_name')[:8]
+                count = MartialArtist.objects.filter(active=True).count()
+                items = [{'text': str(ma), 'url': None} for ma in qs]
+            else:
+                items = []
+                count = 0
             return {'items': items, 'count': count}
         if url_name_or_path == '/ranks/':
-            qs = Rank.objects.select_related('martial_artist', 'rank_type').order_by('-award_date')[:8]
-            count = Rank.objects.count()
+            if martial_artist is not None:
+                qs = Rank.objects.filter(martial_artist=martial_artist).select_related(
+                    'rank_type'
+                ).order_by('-award_date')[:8]
+                count = Rank.objects.filter(martial_artist=martial_artist).count()
+            elif staff_see_all:
+                qs = Rank.objects.select_related('martial_artist', 'rank_type').order_by('-award_date')[:8]
+                count = Rank.objects.count()
+            else:
+                qs = Rank.objects.none()
+                count = 0
             items = [
                 {'text': f'{r.martial_artist} — {r.rank_type.title}', 'sub': r.award_date.strftime('%Y-%m-%d'), 'url': None}
                 for r in qs
             ]
             return {'items': items, 'count': count}
         if url_name_or_path == '/styles/':
-            qs = Style.objects.all().order_by('title')[:15]
-            count = Style.objects.count()
+            if martial_artist is not None:
+                qs = martial_artist.styles.all().order_by('title')[:15]
+                count = martial_artist.styles.count()
+            elif staff_see_all:
+                qs = Style.objects.all().order_by('title')[:15]
+                count = Style.objects.count()
+            else:
+                qs = Style.objects.none()
+                count = 0
             items = [{'text': s.title, 'url': None} for s in qs]
             return {'items': items, 'count': count}
         if url_name_or_path == '/blog/':
@@ -100,7 +127,7 @@ def user_dashboard(request):
             url = _resolve_url(url_name_or_path)
         except Exception:
             continue
-        data = _get_dashboard_section_data(label, url_name_or_path)
+        data = _get_dashboard_section_data(request, label, url_name_or_path)
         if data:
             sections.append({
                 'label': label,

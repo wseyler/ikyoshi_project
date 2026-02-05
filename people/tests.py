@@ -300,11 +300,31 @@ class PeopleViewsTests(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_index_view(self):
-        """Test the people index view"""
-        # Use the full path since 'index' might be ambiguous
+    def test_index_requires_login(self):
+        """People index redirects to login when not authenticated."""
+        response = self.client.get('/people/')
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('/login/', response.url)
+
+    def test_index_shows_message_when_no_profile(self):
+        """Authenticated user without a linked martial artist sees a message."""
+        from django.contrib.auth.models import User
+        user = User.objects.create_user(username='jane', password='testpass123')
+        self.client.login(username='jane', password='testpass123')
         response = self.client.get('/people/')
         self.assertEqual(response.status_code, 200)
-        # Check that the response contains the text (it's in an h1 tag)
-        response_text = response.content.decode('utf-8')
-        self.assertIn('Hello, from the People index.', response_text)
+        self.assertIn('No martial artist profile', response.content.decode('utf-8'))
+
+    def test_index_shows_own_profile_when_linked(self):
+        """Authenticated user with linked martial artist sees their profile."""
+        from django.contrib.auth.models import User
+        from .models import MartialArtist
+        user = User.objects.create_user(username='jane', password='testpass123')
+        ma = MartialArtist.objects.create(
+            first_name='Jane', last_name='Doe', user=user
+        )
+        self.client.login(username='jane', password='testpass123')
+        response = self.client.get('/people/')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Jane', response.content.decode('utf-8'))
+        self.assertIn('Doe', response.content.decode('utf-8'))

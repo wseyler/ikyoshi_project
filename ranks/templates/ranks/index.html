@@ -1,0 +1,44 @@
+{% extends "pages/base.html" %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="mb-3">Ranks</h1>
+  <p class="text-muted">{{ scope_message }}</p>
+  {% if ranks %}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            {% if request.user.is_staff and not martial_artist %}
+              <th>Martial artist</th>
+            {% endif %}
+            <th>Style</th>
+            <th>Rank</th>
+            <th>Award date</th>
+            <th>Test date</th>
+            <th>Tested</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for rank in ranks %}
+            <tr>
+              {% if request.user.is_staff and not martial_artist %}
+                <td>{{ rank.martial_artist }}</td>
+              {% endif %}
+              <td>{{ rank.rank_type.style.title }}</td>
+              <td>{{ rank.rank_type.title }}{% if rank.rank_type.indicator %} ({{ rank.rank_type.indicator }}){% endif %}</td>
+              <td>{{ rank.award_date|date:"M j, Y" }}</td>
+              <td>{% if rank.test_date %}{{ rank.test_date|date:"M j, Y" }}{% else %}—{% endif %}</td>
+              <td>{% if rank.tested %}Yes{% else %}No{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="lead">No ranks to display.</p>
+  {% endif %}
+  <p class="mt-3">
+    <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">← Back to dashboard</a>
+  </p>
+</div>
+{% endblock %}

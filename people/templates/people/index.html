@@ -1,0 +1,63 @@
+{% extends "pages/base.html" %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="mb-3">People</h1>
+  <p class="text-muted">{{ scope_message }}</p>
+  {% if single_profile %}
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">{{ single_profile }}</h2>
+        <dl class="row mb-0">
+          <dt class="col-sm-3">Email</dt>
+          <dd class="col-sm-9">{% if single_profile.email %}{{ single_profile.email }}{% else %}—{% endif %}</dd>
+          <dt class="col-sm-3">Enrollment date</dt>
+          <dd class="col-sm-9">{% if single_profile.enrollment_date %}{{ single_profile.enrollment_date|date:"M j, Y" }}{% else %}—{% endif %}</dd>
+          <dt class="col-sm-3">Birthday</dt>
+          <dd class="col-sm-9">{% if single_profile.birthday %}{{ single_profile.birthday|date:"M j, Y" }}{% else %}—{% endif %}</dd>
+          <dt class="col-sm-3">Styles</dt>
+          <dd class="col-sm-9">{% for s in single_profile.styles.all %}{{ s.title }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</dd>
+          {% if single_profile.sponsor %}
+            <dt class="col-sm-3">Sponsor</dt>
+            <dd class="col-sm-9">{{ single_profile.sponsor }}</dd>
+          {% endif %}
+          {% if single_profile.notes %}
+            <dt class="col-sm-3">Notes</dt>
+            <dd class="col-sm-9">{{ single_profile.notes }}</dd>
+          {% endif %}
+        </dl>
+        {% if single_profile.image %}
+          <img src="{{ single_profile.image.url }}" alt="{{ single_profile }}" class="img-fluid mt-2" style="max-height: 200px;">
+        {% endif %}
+      </div>
+    </div>
+  {% elif people %}
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Enrollment</th>
+            <th>Styles</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in people %}
+            <tr>
+              <td>{{ p }}</td>
+              <td>{% if p.email %}{{ p.email }}{% else %}—{% endif %}</td>
+              <td>{% if p.enrollment_date %}{{ p.enrollment_date|date:"M j, Y" }}{% else %}—{% endif %}</td>
+              <td>{% for s in p.styles.all %}{{ s.title }}{% if not forloop.last %}, {% endif %}{% empty %}—{% endfor %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="lead">No profile to display.</p>
+  {% endif %}
+  <p class="mt-3">
+    <a href="{% url 'user_dashboard' %}" class="btn btn-outline-secondary">← Back to dashboard</a>
+  </p>
+</div>
+{% endblock %}
